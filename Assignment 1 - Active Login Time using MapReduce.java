@@ -1,7 +1,7 @@
 /*
 Input (IP_Address, login_time, logout_time):
 192.168.14.201          		10			20
-192.168.14.202                	25			45				
+192.168.14.202                  	25			45				
 192.168.14.201           		39			50		
 192.168.14.203           		67			89
 192.168.14.203          		37			68
@@ -39,7 +39,7 @@ import org.apache.hadoop.mapred.FileOutputFormat;
 
 public class AccessLog {
 	
-	public static class WordMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, LongWritable> {
+	public static class TokenMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, LongWritable> {
 		private Text textObjectKey = new Text();
 		public void map(LongWritable key, Text value, OutputCollector<Text, LongWritable> output, Reporter reporter) throws IOException {
 			String line = value.toString();
@@ -52,7 +52,7 @@ public class AccessLog {
 		}
 	}
 	
-	public static class WordReducer extends MapReduceBase implements Reducer<Text, LongWritable, Text, LongWritable> {
+	public static class TokenReducer extends MapReduceBase implements Reducer<Text, LongWritable, Text, LongWritable> {
 		public void reduce(Text key, Iterator<LongWritable> values, OutputCollector<Text, LongWritable> output, Reporter reporter) throws IOException  {
 			long sum = 0;
 			while (values.hasNext()) {
@@ -66,8 +66,8 @@ public class AccessLog {
 		JobConf conf = new JobConf(AccessLog.class);
 		conf.setJobName("AccessLogs");
 		
-		conf.setMapperClass(WordMapper.class);
-		conf.setReducerClass(WordReducer.class);
+		conf.setMapperClass(TokenMapper.class);
+		conf.setReducerClass(TokenReducer.class);
 		
 		conf.setOutputKeyClass(Text.class);
 		conf.setOutputValueClass(LongWritable.class);
